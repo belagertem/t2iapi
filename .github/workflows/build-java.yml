@@ -53,7 +53,7 @@ jobs:
           else
             mv pom-default.xml t2iapi-${{ env.BASE_PACKAGE_VERSION }}-SNAPSHOT.txt
           fi
-      - name: Archive built jars
+      - name: Archive built jars and pom
         uses: actions/upload-artifact@v4
         with:
           name: target_jars
