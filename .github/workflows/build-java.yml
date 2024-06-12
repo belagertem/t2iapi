@@ -42,11 +42,8 @@ jobs:
         working-directory: ./java
         run: ./gradlew jar generatePomFileForMavenPublication
       - name: Check files
-        working-directory: ./java
-        run: |
-          ls
-          cd build/publications/maven
-          ls
+        working-directory: ./java/build/publications/maven
+        run: ls
       - name: Rename pom
         working-directory: ./java/build
         run: |
