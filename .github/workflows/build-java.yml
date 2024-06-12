@@ -40,9 +40,7 @@ jobs:
           gradle-version: ${{ env.GRADLE_VERSION }}
       - name: Execute build
         working-directory: ./java
-        run: |
-          ./gradlew jar
-          ./gradlew generatePomFileForMavenPublication
+        run: ./gradlew jar generatePomFileForMavenPublication
       - name: Rename pom
         working-directory: ./java/build
         run: |
