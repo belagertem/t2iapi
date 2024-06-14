@@ -7,7 +7,6 @@ on:
 env:
   GRADLE_VERSION: 7.5.1
   RELEASE_VERSION: 0
-  POM_VERSION: "${{ !startsWith(github.ref, 'refs/tags/v') && '${{ env.BASE_PACKAGE_VERSION }}.${{ github.run_number }}-SNAPSHOT' || '${{ env.BASE_PACKAGE_VERSION }}' }}"
 
 jobs:
   build-java:
@@ -45,8 +44,14 @@ jobs:
       - name: Rename pom
         working-directory: ./java/build/publications/maven
         run: |
-          echo "name is ${{ env.POM_VERSION }}"
-          mv pom-default.xml ./../../libs/t2iapi-${{ env.POM_VERSION }}.pom
+          ref='refs/tags/v'
+          if [ ${{ github.ref }} == *${ref}* ]; then
+            echo "its a release"
+            mv pom-default.xml ./../../libs/t2iapi-${{ env.BASE_PACKAGE_VERSION }}.pom
+          else
+            echo "its a snapshot"
+            mv pom-default.xml ./../../libs/t2iapi-${{ env.BASE_PACKAGE_VERSION }}.${{ github.run_number }}-SNAPSHOT.pom
+          fi
       - name: Archive built jars and pom
         uses: actions/upload-artifact@v4
         with:
