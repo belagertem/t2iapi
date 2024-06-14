@@ -47,8 +47,10 @@ jobs:
           echo "github.ref is ${{ github.ref }}"
           echo "is it starting with refs/tags/v: ${{ startsWith(github.ref, 'refs/tags/v') }}"
           if [ ${{ startsWith(github.ref, 'refs/tags/v') }} ]; then
+            echo "it's a release"
             mv pom-default.xml ./../../libs/t2iapi-${{ env.BASE_PACKAGE_VERSION }}.pom
           else
+            echo "it's a snapshot"
             mv pom-default.xml ./../../libs/t2iapi-${{ env.BASE_PACKAGE_VERSION }}.${{ github.run_number }}-SNAPSHOT.pom
           fi
       - name: Archive built jars and pom
