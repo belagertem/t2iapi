@@ -44,6 +44,8 @@ jobs:
       - name: Rename pom
         working-directory: ./java/build/publications/maven
         run: |
+          echo "github.ref is ${{ github.ref }}"
+          echo "is it starting with refs/tags/v: ${{ startsWith(github.ref, 'refs/tags/v') }}"
           if [ ${{ startsWith(github.ref, 'refs/tags/v') }} ]; then
             mv pom-default.xml ./../../libs/t2iapi-${{ env.BASE_PACKAGE_VERSION }}.pom
           else
