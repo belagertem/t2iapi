@@ -46,7 +46,9 @@ jobs:
         run: |
           echo "github.ref is ${{ github.ref }}"
           echo "is it starting with refs/tags/v: ${{ startsWith(github.ref, 'refs/tags/v') }}"
-          if [ ${{ startsWith(github.ref, 'refs/tags/v') }} ]; then
+          isRelease=${{ startsWith(github.ref, 'refs/tags/v') }}
+          echo "isRelease=$isRelease"
+          if [ isRelease ]; then
             echo "it's a release"
             mv pom-default.xml ./../../libs/t2iapi-${{ env.BASE_PACKAGE_VERSION }}.pom
           else
