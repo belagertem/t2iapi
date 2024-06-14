@@ -7,7 +7,7 @@ on:
 env:
   GRADLE_VERSION: 7.5.1
   RELEASE_VERSION: 0
-  POM_VERSION: "${{ !startsWith(github.ref, 'refs/tags/v') && '${{ env.BASE_PACKAGE_VERSION }}.${{ github.run_number }}-SNAPSHOT' || '${{ env.BASE_PACKAGE_VERSION }}' }}"
+  POM_VERSION: "${{ !startsWith(github.ref, 'refs/tags/v') && ${{ env.BASE_PACKAGE_VERSION }}.${{ github.run_number }}-SNAPSHOT || ${{ env.BASE_PACKAGE_VERSION }} }}"
 
 jobs:
   build-java:
@@ -44,7 +44,9 @@ jobs:
         run: ./gradlew jar generatePomFileForMavenPublication
       - name: Rename pom
         working-directory: ./java/build/publications/maven
-        run: mv pom-default.xml ./../../libs/t2iapi-${{ env.POM_VERSION }}.pom
+        run: |
+          echo "name is ${{ env.POM_VERSION }}"
+          mv pom-default.xml ./../../libs/t2iapi-${{ env.POM_VERSION }}.pom
       - name: Archive built jars and pom
         uses: actions/upload-artifact@v4
         with:
