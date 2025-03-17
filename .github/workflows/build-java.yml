@@ -154,8 +154,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            target_jars.zip
-            test_results.zip
+            release.zip
+            java-test-results.zip
           prerelease: ${{ !startsWith(github.ref, 'refs/tags/v') }}
           body_path: CHANGELOG.md
 
