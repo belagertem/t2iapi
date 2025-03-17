@@ -117,21 +117,17 @@ jobs:
         with:
           gradle-version: ${{ env.GRADLE_VERSION }}
 
+      - name: Download t2iapi jar artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: target_jars
+          path: java/build/libs
+
       - name: Download test results
         uses: actions/download-artifact@v4
         with:
           name: test_results
           path: tests/java/build/reports/tests/test/**/*.*
-
-      - name: Publish package
-        working-directory: ./java
-        run: |
-          ./gradlew publish
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-          MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
 
       - name: Install zip
         if: startsWith(github.ref, 'refs/tags/')
@@ -147,8 +143,17 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            java/build/libs/*.jar
-            java/build/publications/maven/pom-default.xml
+            java/build/libs/target_jars
             java-test-results.zip
           prerelease: ${{ !startsWith(github.ref, 'refs/tags/v') }}
           body_path: CHANGELOG.md
+
+      - name: Publish package
+        working-directory: ./java
+        run: |
+          ./gradlew publish
+              env:
+                MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+                MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+                MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+                MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
