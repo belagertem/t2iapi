@@ -122,10 +122,16 @@ jobs:
         with:
           name: target_jars
 
+      - name: Display downloaded artifacts
+        run: ls -R
+
       - name: Download test results
         uses: actions/download-artifact@v4
         with:
           name: test_results
+
+      - name: Display downloaded artifacts2
+        run: ls -R
 
       - name: Attach artifacts to github release
         uses: softprops/action-gh-release@v1
